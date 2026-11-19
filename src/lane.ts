@@ -8,7 +8,7 @@ export default class Lane {
   }
 
   /**
-   * adds the lane number
+   * adds the lane number to a lane arrays
    * @param number the lane number
    */
   public addNumber(number: LaneNumber): void {

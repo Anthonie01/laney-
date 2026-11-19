@@ -4,8 +4,8 @@ export default class LaneNumber {
   private secret: boolean;
 
   public constructor() {
-    this.value = 0;
-    this.secret = false;
+    this.value = Math.floor(Math.random()*10) + 1;
+    this.secret = Math.random() > 0.9;
   }
 
   /**
@@ -13,11 +13,7 @@ export default class LaneNumber {
    * @returns true or false if it is a secret
    */
   public isSecret(): boolean {
-    if (Math.random() > 0.2) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.secret;
   }
 
   public getValue(): number {

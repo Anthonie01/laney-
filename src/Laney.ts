@@ -1,7 +1,24 @@
+import Lane from "./lane.js";
+import LaneNumber from "./laneNumber.js";
 
 export default class Laney {
-  public constructor(numberOfLanes: number = 3) {
+  private busted: boolean;
 
+  private lanes: Lane[];
+
+  private nextNumbers: LaneNumber[];
+
+  public constructor(numberOfLanes: number = 3) {
+    this.busted = false;
+    this.lanes = [];
+    this.nextNumbers = [];
+
+    for (let i: number = 0; i < numberOfLanes; i++) {
+      this.lanes[i] = new Lane();
+    }
+    for(let i: number = 0; i < 3; i++) {
+      this.nextNumbers[i] = new LaneNumber();
+    }
   }
 
   /**
@@ -11,7 +28,8 @@ export default class Laney {
    * @returns void
    */
   public placeNumberInLane(laneIndex: number): void {
-
+    this.lanes[laneIndex].addNumber(this.nextNumbers.shift()!);
+    this.nextNumbers.push(new LaneNumber());
   }
 
   /**
@@ -20,7 +38,20 @@ export default class Laney {
    * @returns string
    */
   public getMessage(): string {
-    return "You busted! Start a new game?";
+    const numbers: string[] = [];
+    this.isBusted();
+    if(this.busted == true) {
+      return "You busted! Start a new game?";
+    } else {
+      for (let i: number = 0; i < 3; i++) {
+        if(this.nextNumbers[i].isSecret() == true) {
+          numbers[i] = "?";
+        } else {
+          numbers[i] = this.nextNumbers[i].getValue().toString();
+        }
+      }
+      return `Next numbers are: ${numbers[0]}, ${numbers[1]}, ${numbers[2]}`;
+    }
   }
 
   /**
@@ -29,7 +60,7 @@ export default class Laney {
    * @returns number
    */
   public getLaneTotal(laneIndex: number): number {
-    return 0;
+    return this.lanes[laneIndex].getTotal();
   }
 
   /**
@@ -37,7 +68,11 @@ export default class Laney {
    * @returns number
    */
   public getTotal(): number {
-    return 0;
+    let total: number = 0;
+    for (let i: number = 0; i < this.lanes.length; i++) {
+      total += this.lanes[i].getTotal();
+    }
+    return total;
   }
 
   /**
@@ -45,7 +80,13 @@ export default class Laney {
    * @returns boolean
    */
   public isBusted(): boolean {
-    /**get value if value of one of the three is >70 bust which means lost restart. first check bust before trying to add score**/
-    return false;
+    for (let i: number = 0; i < this.lanes.length; i++) {
+      if(this.lanes[i].isBusted() == true) {
+        this.busted = true;
+        return this.busted;
+      }
+    }
+    this.busted = false;
+    return this.busted;
   }
 }
