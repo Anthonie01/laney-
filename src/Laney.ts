@@ -45,6 +45,7 @@ export default class Laney {
    * @returns boolean
    */
   public isBusted(): boolean {
+    /**get value if value of one of the three is >70 bust which means lost restart. first check bust before trying to add score**/
     return false;
   }
 }
